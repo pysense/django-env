@@ -10,7 +10,6 @@ COMPILE_SQLITE_SOURCE_FILENAME=sqlite-autoconf-3350500.tar.gz
 mkdir -p src
 
 # https://www.sqlite.org/download.html
-# Update: 20210608
 compile_sqlite() {
     if [[ -f /usr/local/lib/libsqlite3.so ]]; then return; fi
 
@@ -28,10 +27,11 @@ compile_sqlite() {
     cd $sqlite_source_dirname
     ./configure
     make && make install
-    rm -fr $sqlite_source_dirname
+    cd .. && rm -fr $sqlite_source_dirname
     popd
 }
 
+# Update: 20210608
 compile_python_with_sqlite() {
     compile_sqlite sqlite-autoconf-3350500.tar.gz
     LD_RUN_PATH=/usr/local/lib pyenv install -v $INSTALL_PYTHON_VERSION
@@ -45,7 +45,7 @@ if [[ $py_sqlite_minor_version -lt 9 ]]; then
     if command -v pyenv > /dev/null; then
         compile_python_with_sqlite
     fi
-else
-    echo Python version: $(python -V | cut -d" " -f2)
-    echo sqlite3.sqlite_version: $py_sqlite_version
 fi
+
+echo Python version: $(python -V | cut -d" " -f2)
+echo sqlite3.sqlite_version: $py_sqlite_version

@@ -12,3 +12,11 @@ if [[ -n $nginx_version ]]; then
 else
     yum install -y nginx
 fi
+
+pip install -U pip
+
+if command -v uwsgi > /dev/null; then
+    echo uWSGI version: $(uwsgi --version)
+else
+    pip install uwsgi
+fi
